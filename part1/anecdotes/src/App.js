@@ -12,9 +12,55 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  const [selected, setSelected] = useState(0);
+  const anecdotesLength = anecdotes.length;
+  const emptyVotes = Array(anecdotesLength).fill(0);
 
-  return <div>{anecdotes[selected]}</div>;
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState([...emptyVotes]);
+  const [highestVote, setHighestVote] = useState(0);
+  const [topAnecdote, setTopAnecdote] = useState(0);
+
+  const Button = ({ handleClick, text }) => {
+    return <button onClick={handleClick}>{text}</button>;
+  };
+
+  const random = () => {
+    const randomNumber = Math.random() * anecdotes.length;
+    const roundedNumber = Math.floor(randomNumber);
+    return roundedNumber;
+  };
+
+  const nextAnecdote = () => {
+    const index = random();
+    setSelected(index);
+  };
+
+  const vote = () => {
+    const copy = [...votes];
+    const currentVote = copy[selected];
+    const updatedVote = currentVote + 1;
+    copy[selected] = updatedVote;
+    setVotes(copy);
+    if (updatedVote > highestVote) {
+      setHighestVote(updatedVote);
+      setTopAnecdote(selected);
+    }
+  };
+
+  return (
+    <>
+      <h1>Anecdote of the day</h1>
+
+      <div>{anecdotes[selected]}</div>
+      <div>has {votes[selected]} votes </div>
+      <Button handleClick={vote} text="vote" />
+      <Button handleClick={nextAnecdote} text="next anecdote" />
+
+      <h1>Anecdote with most votes</h1>
+      <div>{anecdotes[topAnecdote]}</div>
+      <div>has {votes[topAnecdote]} votes </div>
+    </>
+  );
 };
 
 export default App;
