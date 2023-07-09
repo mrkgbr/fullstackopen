@@ -18,6 +18,11 @@ const App = () => {
         exercises: 14,
         id: 3,
       },
+      {
+        name: "Redux",
+        exercises: 11,
+        id: 4,
+      },
     ],
   };
 
@@ -26,6 +31,7 @@ const App = () => {
       <>
         <Header name={course.name} />
         <Content parts={course.parts} />
+        <Total parts={course.parts} />
       </>
     );
   };
@@ -50,6 +56,14 @@ const App = () => {
         {part.name} {part.exercises}
       </p>
     );
+  };
+
+  const Total = ({ parts }) => {
+    const total = parts.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.exercises,
+      0
+    );
+    return <h3>total of {total} exercises</h3>;
   };
 
   return (
