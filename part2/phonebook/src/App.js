@@ -14,14 +14,6 @@ const App = () => {
   const [filteredList, setFilteredList] = useState([]);
 
   useEffect(() => {
-    console.log("effect");
-    // axios.get("http://localhost:3001/persons").then((response) => {
-    //   console.log("promise fulfilled");
-    //   const data = response.data;
-    //   setPersons(data);
-    //   setFilteredList(data);
-    // });
-
     numberService.getAll().then((initialNumbers) => {
       setPersons(initialNumbers);
       setFilteredList(initialNumbers);
