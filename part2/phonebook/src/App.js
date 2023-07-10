@@ -4,6 +4,7 @@ import Numbers from "./components/Numbers";
 import Title from "./components/Title";
 import { Filter } from "./components/Filter";
 import axios from "axios";
+import numberService from "./services/numbers";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -14,11 +15,16 @@ const App = () => {
 
   useEffect(() => {
     console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      const data = response.data;
-      setPersons(data);
-      setFilteredList(data);
+    // axios.get("http://localhost:3001/persons").then((response) => {
+    //   console.log("promise fulfilled");
+    //   const data = response.data;
+    //   setPersons(data);
+    //   setFilteredList(data);
+    // });
+
+    numberService.getAll().then((initialNumbers) => {
+      setPersons(initialNumbers);
+      setFilteredList(initialNumbers);
     });
   }, []);
 
@@ -50,11 +56,29 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    const newPersons = persons.concat(newObject);
-    setPersons(newPersons);
-    setFilteredList(newPersons);
-    setNewName("");
-    setNewNumber("");
+
+    numberService.create(newObject).then((returnedNumber) => {
+      const newPersons = persons.concat(returnedNumber);
+      setPersons(newPersons);
+      setFilteredList(newPersons);
+      setNewName("");
+      setNewNumber("");
+    });
+  };
+
+  const handleRemove = (name, id) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      numberService
+        .remove(id)
+        .then((returnedNumber) => {
+          const newPersons = returnedNumber;
+          setPersons(newPersons);
+          setFilteredList(newPersons);
+        })
+        .catch((error) => {
+          alert(`the note '${name}' was already deleted from server`);
+        });
+    }
   };
 
   const filterItems = (text) => {
@@ -76,7 +100,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <Title text="Numbers" />
-      <Numbers persons={filteredList} />
+      <Numbers persons={filteredList} handleRemove={handleRemove} />
     </div>
   );
 };
