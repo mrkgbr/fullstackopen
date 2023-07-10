@@ -59,7 +59,7 @@ const App = () => {
 
   return (
     <div>
-      <Title text="Phonebook" />
+      <Title text="Phonebook" tag="h2" />
       <Filter value={filter} handleChange={handleFilterChange} />
       <Title text="add a new" />
       <Form
