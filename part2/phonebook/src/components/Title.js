@@ -1,5 +1,5 @@
-const Title = () => {
-  return <h2>Phonebook</h2>;
+const Title = ({ text }) => {
+  return <h2>{text}</h2>;
 };
 
 export default Title;

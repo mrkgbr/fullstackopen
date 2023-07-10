@@ -1,13 +1,4 @@
-const Input = ({ type, text, value, handleChange }) => {
-  return (
-    <input
-      value={value}
-      type={type}
-      placeholder={text}
-      onChange={handleChange}
-    />
-  );
-};
+import { Input } from "./Input";
 
 const Form = ({
   handleNameChange,
@@ -23,7 +14,7 @@ const Form = ({
         <Input
           value={newName}
           type={"text"}
-          text={"John Doe..."}
+          placeholder={"John Doe..."}
           handleChange={handleNameChange}
         />
       </div>
@@ -32,7 +23,7 @@ const Form = ({
         <Input
           value={newNumber}
           type={"text"}
-          text={"00-00-0000000"}
+          placeholder={"00-00-0000000"}
           handleChange={handleNumberChange}
         />
       </div>

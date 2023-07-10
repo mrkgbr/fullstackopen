@@ -2,13 +2,19 @@ import { useState } from "react";
 import Form from "./components/Form";
 import Numbers from "./components/Numbers";
 import Title from "./components/Title";
+import { Filter } from "./components/Filter";
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "00-00-0000000" },
+    { name: "Arto Hellas", number: "040-123456", id: 1 },
+    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
+    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
+    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [filter, setFilter] = useState("");
+  const [filteredList, setFilteredList] = useState(persons);
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -16,6 +22,13 @@ const App = () => {
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
+  };
+
+  const handleFilterChange = (event) => {
+    const newFilter = event.target.value;
+    setFilter(newFilter);
+    const newFilteredList = filterItems(newFilter);
+    setFilteredList(newFilteredList);
   };
 
   const handleSubmit = (event) => {
@@ -31,14 +44,24 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    setPersons(persons.concat(newObject));
+    const newPersons = persons.concat(newObject);
+    setPersons(newPersons);
+    setFilteredList(newPersons);
     setNewName("");
     setNewNumber("");
   };
 
+  const filterItems = (text) => {
+    return persons.filter((el) =>
+      el.name.toLowerCase().includes(text.toLowerCase())
+    );
+  };
+
   return (
     <div>
-      <Title />
+      <Title text="Phonebook" />
+      <Filter value={filter} handleChange={handleFilterChange} />
+      <Title text="add a new" />
       <Form
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
@@ -46,7 +69,8 @@ const App = () => {
         newName={newName}
         newNumber={newNumber}
       />
-      <Numbers persons={persons} />
+      <Title text="Numbers" />
+      <Numbers persons={filteredList} />
     </div>
   );
 };
