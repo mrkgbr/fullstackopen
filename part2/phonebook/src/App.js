@@ -3,8 +3,8 @@ import Form from "./components/Form";
 import Numbers from "./components/Numbers";
 import Title from "./components/Title";
 import { Filter } from "./components/Filter";
-import axios from "axios";
 import numberService from "./services/numbers";
+import { Notification } from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
   const [filteredList, setFilteredList] = useState([]);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     numberService.getAll().then((initialNumbers) => {
@@ -38,15 +39,27 @@ const App = () => {
   const handleUpdate = (checkName) => {
     const number = persons.find((number) => number.id === checkName.id);
     const changedNumber = { ...number, number: newNumber };
-    numberService.update(checkName.id, changedNumber).then((returnedNumber) => {
-      const newPersons = persons.map((number) =>
-        number.id !== checkName.id ? number : returnedNumber
-      );
-      setPersons(newPersons);
-      setFilteredList(newPersons);
-      setNewName("");
-      setNewNumber("");
-    });
+    numberService
+      .update(checkName.id, changedNumber)
+      .then((returnedNumber) => {
+        const newPersons = persons.map((number) =>
+          number.id !== checkName.id ? number : returnedNumber
+        );
+        setPersons(newPersons);
+        setFilteredList(newPersons);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        const message = {
+          type: "error",
+          text: `Information of ${newName} has already been removed from server`,
+        };
+        setMessage(message);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      });
   };
 
   const handleAdd = () => {
@@ -57,6 +70,14 @@ const App = () => {
 
     numberService.create(newObject).then((returnedNumber) => {
       const newPersons = persons.concat(returnedNumber);
+      const message = {
+        type: "normal",
+        text: `Added ${newName}`,
+      };
+      setMessage(message);
+      setTimeout(() => {
+        setMessage(null);
+      }, 5000);
       setPersons(newPersons);
       setFilteredList(newPersons);
       setNewName("");
@@ -110,6 +131,7 @@ const App = () => {
   return (
     <div>
       <Title text="Phonebook" tag="h2" />
+      <Notification message={message} />
       <Filter value={filter} handleChange={handleFilterChange} />
       <Title text="add a new" />
       <Form
