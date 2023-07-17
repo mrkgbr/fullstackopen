@@ -91,6 +91,9 @@ const App = () => {
           text: error.response.data.error,
         };
         setMessage(message);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
   };
 
