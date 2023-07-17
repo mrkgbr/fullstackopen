@@ -68,21 +68,30 @@ const App = () => {
       number: newNumber,
     };
 
-    numberService.create(newObject).then((returnedNumber) => {
-      const newPersons = persons.concat(returnedNumber);
-      const message = {
-        type: "normal",
-        text: `Added ${newName}`,
-      };
-      setMessage(message);
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-      setPersons(newPersons);
-      setFilteredList(newPersons);
-      setNewName("");
-      setNewNumber("");
-    });
+    numberService
+      .create(newObject)
+      .then((returnedNumber) => {
+        const newPersons = persons.concat(returnedNumber);
+        const message = {
+          type: "normal",
+          text: `Added ${newName}`,
+        };
+        setMessage(message);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+        setPersons(newPersons);
+        setFilteredList(newPersons);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        const message = {
+          type: "error",
+          text: error.response.data.error,
+        };
+        setMessage(message);
+      });
   };
 
   const handleSubmit = (event) => {

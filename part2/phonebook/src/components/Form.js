@@ -23,7 +23,7 @@ const Form = ({
         <Input
           value={newNumber}
           type={"text"}
-          placeholder={"00-00-0000000"}
+          placeholder={"12-345678"}
           handleChange={handleNumberChange}
         />
       </div>
