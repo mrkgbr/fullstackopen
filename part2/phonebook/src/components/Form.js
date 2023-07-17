@@ -23,9 +23,10 @@ const Form = ({
         <Input
           value={newNumber}
           type={"text"}
-          placeholder={"12-345678"}
+          placeholder={"..."}
           handleChange={handleNumberChange}
         />
+        <p>Correct number formats: 12-1234567 or 123-12345678</p>
       </div>
       <div>
         <button type="submit">add</button>
