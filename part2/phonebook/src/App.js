@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/react-in-jsx-scope */
 import { useState, useEffect } from "react";
 import Form from "./components/Form";
 import Numbers from "./components/Numbers";
